@@ -1,6 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using TCCPosPucMinas.API.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// Add services to the container.
+builder.Services.AddDbContext<DataContext>(
+        context => context.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
+);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -16,7 +23,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection(); //Enable the SSL Certificate
 
 app.UseAuthorization();
 
