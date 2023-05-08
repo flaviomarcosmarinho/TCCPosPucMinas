@@ -1,8 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Net.Sockets;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TCCPosPucMinas.API.Models
 {
@@ -29,15 +28,26 @@ namespace TCCPosPucMinas.API.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [DefaultValue("getutcdate()")]
         public DateTime DataCadastro { get; set; }
-        public string Cor { get; set; }
-        public int Quilometragem { get; set; }
 
+        [StringLength(20)]
+        public string Cor { get; set; }
+
+        [StringLength(255)]
+        public string Descricao { get; set; }
+
+        [StringLength(255)]
+        public string Observacao { get; set; }
+
+        public int Quilometragem { get; set; }
         public bool UnicoDono { get; set; } = false;
         public string Status { get; set; }
 
         [Precision(18, 2)]
         [Required(ErrorMessage = "Valor é obrigatório.")]
         public decimal Preco { get; set; }
+
+        [StringLength(7)]
+        public string Placa { get; set; }
 
         public string ImagemURL { get; set; }
     }
