@@ -39,7 +39,7 @@ namespace TCCPosPucMinas.API.Models
         public string Observacao { get; set; }
 
         public int Quilometragem { get; set; }
-        public bool UnicoDono { get; set; } = false;
+        public bool UnicoDono { get; set; } = false;    
         public string Status { get; set; }
 
         [Precision(18, 2)]
@@ -47,7 +47,7 @@ namespace TCCPosPucMinas.API.Models
         public decimal Preco { get; set; }
 
         [StringLength(7)]
-        public string Placa { get; set; }
+        public string Placa { get; set; } = null;
 
         public string ImagemURL { get; set; }
     }
