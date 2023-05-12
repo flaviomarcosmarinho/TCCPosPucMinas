@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using TCCPosPucMinas.API.Data;
+using TCCPosPucMinas.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<DataContext>(
+builder.Services.AddDbContext<TCCPosPucMinasContext>(
         context => context.UseSqlServer(builder.Configuration.GetConnectionString("Default"))
 );
 

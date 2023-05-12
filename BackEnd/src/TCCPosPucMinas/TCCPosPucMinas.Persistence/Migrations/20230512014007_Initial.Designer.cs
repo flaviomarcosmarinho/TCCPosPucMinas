@@ -5,33 +5,50 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TCCPosPucMinas.API.Data;
+using TCCPosPucMinas.Persistence;
 
 #nullable disable
 
-namespace TCCPosPucMinas.API.Data.Migrations
+namespace TCCPosPucMinas.Persistence.Migrations
 {
-    [DbContext(typeof(DataContext))]
-    [Migration("20230508000720_AddFieldsVeiculo")]
-    partial class AddFieldsVeiculo
+    [DbContext(typeof(TCCPosPucMinasContext))]
+    [Migration("20230512014007_Initial")]
+    partial class Initial
     {
-        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "6.0.16")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("TCCPosPucMinas.API.Models.Veiculo", b =>
+            modelBuilder.Entity("TCCPosPucMinas.Domain.Models.Marca", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Marcas");
+                });
+
+            modelBuilder.Entity("TCCPosPucMinas.Domain.Models.Veiculo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("AnoFabricacao")
                         .IsRequired()
@@ -61,10 +78,8 @@ namespace TCCPosPucMinas.API.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Marca")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                    b.Property<int>("MarcaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Modelo")
                         .IsRequired()
@@ -76,9 +91,10 @@ namespace TCCPosPucMinas.API.Data.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<decimal>("Preco")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("Placa")
+                        .IsRequired()
+                        .HasMaxLength(7)
+                        .HasColumnType("nvarchar(7)");
 
                     b.Property<int>("Quilometragem")
                         .HasColumnType("int");
@@ -90,9 +106,31 @@ namespace TCCPosPucMinas.API.Data.Migrations
                     b.Property<bool>("UnicoDono")
                         .HasColumnType("bit");
 
+                    b.Property<decimal>("Valor")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("MarcaId");
+
                     b.ToTable("Veiculos");
+                });
+
+            modelBuilder.Entity("TCCPosPucMinas.Domain.Models.Veiculo", b =>
+                {
+                    b.HasOne("TCCPosPucMinas.Domain.Models.Marca", "MarcaNavigation")
+                        .WithMany("VeiculosNavigation")
+                        .HasForeignKey("MarcaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("MarcaNavigation");
+                });
+
+            modelBuilder.Entity("TCCPosPucMinas.Domain.Models.Marca", b =>
+                {
+                    b.Navigation("VeiculosNavigation");
                 });
 #pragma warning restore 612, 618
         }

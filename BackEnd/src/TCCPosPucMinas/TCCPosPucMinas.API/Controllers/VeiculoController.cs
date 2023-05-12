@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using TCCPosPucMinas.API.Data;
-using TCCPosPucMinas.API.Models;
+using TCCPosPucMinas.Domain.Models;
+using TCCPosPucMinas.Persistence;
 
 namespace TCCPosPucMinas.API.Controllers
 {
@@ -8,23 +8,23 @@ namespace TCCPosPucMinas.API.Controllers
     [Route("api/[controller]")]
     public class VeiculoController : ControllerBase
     {
-        private readonly DataContext context;
+        private readonly TCCPosPucMinasContext _context;
 
-        public VeiculoController(DataContext context)
+        public VeiculoController(TCCPosPucMinasContext context)
         {
-            this.context = context;
+            this._context = context;
         }
 
         [HttpGet]
         public IEnumerable<Veiculo> Get()
         {
-            return context.Veiculos;
+            return _context.Veiculos;
         }
 
         [HttpGet("{id}")]
         public ActionResult<Veiculo> GetById(int id)
         {
-             var veiculo = context.Veiculos.FirstOrDefault(v => v.Id == id);
+             var veiculo = _context.Veiculos.FirstOrDefault(v => v.Id == id);
             
             if(veiculo != null)
             {

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TCCPosPucMinas.API.Models
+namespace TCCPosPucMinas.Domain.Models
 {
     public class Veiculo
     {
@@ -11,9 +11,8 @@ namespace TCCPosPucMinas.API.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Marca é obrigatória.")]
-        [StringLength(150)]
-        public string Marca { get; set; }
+        [Required(ErrorMessage = "Marca é obrigatória.")]        
+        public int MarcaId { get; set; }
 
         [Required(ErrorMessage = "Modelo é obrigatório.")]
         [StringLength(150)]
@@ -24,7 +23,7 @@ namespace TCCPosPucMinas.API.Models
 
         [StringLength(4)]
         public string AnoFabricacao { get; set; }
-        
+
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [DefaultValue("getutcdate()")]
         public DateTime DataCadastro { get; set; }
@@ -39,16 +38,18 @@ namespace TCCPosPucMinas.API.Models
         public string Observacao { get; set; }
 
         public int Quilometragem { get; set; }
-        public bool UnicoDono { get; set; } = false;    
+        public bool UnicoDono { get; set; } = false;
         public string Status { get; set; }
 
         [Precision(18, 2)]
         [Required(ErrorMessage = "Valor é obrigatório.")]
-        public decimal Preco { get; set; }
+        public decimal Valor { get; set; }
 
         [StringLength(7)]
         public string Placa { get; set; } = null;
 
         public string ImagemURL { get; set; }
+
+        public Marca MarcaNavigation { get; set; }
     }
 }
