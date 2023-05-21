@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using TCCPosPucMinas.Application.Interface;
 using TCCPosPucMinas.Domain.Models;
-using TCCPosPucMinas.Persistence;
 
 namespace TCCPosPucMinas.API.Controllers
 {
@@ -8,31 +8,67 @@ namespace TCCPosPucMinas.API.Controllers
     [Route("api/[controller]")]
     public class VeiculoController : ControllerBase
     {
-        private readonly TCCPosPucMinasContext _context;
+        private readonly IVeiculoService _veiculoService;
 
-        public VeiculoController(TCCPosPucMinasContext context)
+        public VeiculoController(IVeiculoService veiculoService)
         {
-            this._context = context;
+            this._veiculoService = veiculoService;
         }
 
         [HttpGet]
-        public IEnumerable<Veiculo> Get()
+        public async Task<IActionResult> Get()
         {
-            return _context.Veiculos;
+            try
+            {
+                var veiculos = await _veiculoService.GetAllVeiculosAsync();
+                if (veiculos == null)
+                {
+                    return NotFound("Nenhum veículo encontrado!");
+                }
+
+                return Ok(veiculos);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao tentar recuperar os veículos. Erro: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Veiculo> GetById(int id)
+        public async Task<ActionResult<Veiculo>> GetById(int id)
         {
-             var veiculo = _context.Veiculos.FirstOrDefault(v => v.Id == id);
-            
-            if(veiculo != null)
+            try
             {
+                var veiculo = await _veiculoService.GetVeiculoByIdAsync(id);
+                if (veiculo == null)
+                {
+                    return NotFound("Veículo não encontrado!");
+                }
+
                 return Ok(veiculo);
             }
-            else
+            catch (Exception ex)
             {
-                return NotFound("Veículo não encontrado!");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao tentar recuperar o veículo com id: {id}. Erro: {ex.Message}");
+            }
+        }
+
+        [HttpGet("veiculo/{marca}")]
+        public async Task<IActionResult> GetByMarca(string marca)
+        {
+            try
+            {
+                var veiculos = await _veiculoService.GetAllVeiculoByMarcaAsync(marca);
+                if (veiculos == null)
+                {
+                    return NotFound($"Nenhum veículo da marca {marca} encontrado!");
+                }
+
+                return Ok(veiculos);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao tentar recuperar os veículos da marca: {marca}. Erro: {ex.Message}");
             }
         }
     }

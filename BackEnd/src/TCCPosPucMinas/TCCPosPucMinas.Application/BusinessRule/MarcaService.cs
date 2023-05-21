@@ -76,19 +76,40 @@ namespace TCCPosPucMinas.Application.BusinessRule
             }
         }
 
-        public Task<Marca[]> GetAllMarcasAsync()
+        public async Task<Marca[]> GetAllMarcasAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _marcaPersist.GetAllMarcasAsync();          
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public Task<Marca?> GetMarcaByIdAsync(int marcaId)
+        public async Task<Marca?> GetMarcaByIdAsync(int marcaId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _marcaPersist.GetMarcaByIdAsync(marcaId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
-        public Task<Marca?> GetMarcaByNomeAsync(string marca)
+        public async Task<Marca?> GetMarcaByNomeAsync(string marca)
         {
-            throw new NotImplementedException();
+            try
+            {
+                return await _marcaPersist.GetMarcaByNomeAsync(marca);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }        
     }
 }
