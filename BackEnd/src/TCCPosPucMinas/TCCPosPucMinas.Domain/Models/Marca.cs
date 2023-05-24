@@ -13,6 +13,7 @@ namespace TCCPosPucMinas.Domain.Models
         [StringLength(150)]
         public string Nome { get; set; }
 
-        public List<Veiculo> VeiculosNavigation { get; set; }
+
+        public IEnumerable<Veiculo>? VeiculosNavigation { get; set; }
     }
 }

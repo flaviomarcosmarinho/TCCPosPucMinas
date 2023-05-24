@@ -64,7 +64,6 @@ namespace TCCPosPucMinas.Persistence.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime>("DataCadastro")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Descricao")

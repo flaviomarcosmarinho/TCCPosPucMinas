@@ -7,7 +7,8 @@ namespace TCCPosPucMinas.Persistence.Repositoty
     public class VeiculoPersistence : GeralPersistence, IVeiculoPersist
     {     
         public VeiculoPersistence(TCCPosPucMinasContext context) : base(context)
-        {            
+        {
+            //context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         #region Veiculo
@@ -17,7 +18,7 @@ namespace TCCPosPucMinas.Persistence.Repositoty
             IQueryable<Veiculo> query = _context.Veiculos.Include(v => v.MarcaNavigation);
             query = query.OrderBy(v => v.MarcaNavigation.Nome);
 
-            return await query.ToArrayAsync();
+            return await query.AsNoTracking().ToArrayAsync();
         }
 
         public async Task<Veiculo[]> GetAllVeiculosByMarcaAsync(string marca)
@@ -25,12 +26,12 @@ namespace TCCPosPucMinas.Persistence.Repositoty
             IQueryable<Veiculo> query = _context.Veiculos.Include(v => v.MarcaNavigation);
             query = query.Where(v => v.MarcaNavigation.Nome.ToLower().Equals(marca.ToLower()));
 
-            return await query.ToArrayAsync();
+            return await query.AsNoTracking().ToArrayAsync();
         }
 
         public async Task<Veiculo?> GetVeiculoByIdAsync(int veiculoId)
         {
-            return await _context.Veiculos.FirstOrDefaultAsync(v => v.Id == veiculoId);
+            return await _context.Veiculos.AsNoTracking().FirstOrDefaultAsync(v => v.Id == veiculoId);
         }
 
         #endregion

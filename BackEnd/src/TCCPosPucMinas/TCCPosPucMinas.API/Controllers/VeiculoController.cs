@@ -76,7 +76,7 @@ namespace TCCPosPucMinas.API.Controllers
         public async Task<IActionResult> Post(Veiculo model)
         {
             try
-            {
+            {                
                 var veiculo = await _veiculoService.AddVeiculo(model);
                 if (veiculo == null)
                 {

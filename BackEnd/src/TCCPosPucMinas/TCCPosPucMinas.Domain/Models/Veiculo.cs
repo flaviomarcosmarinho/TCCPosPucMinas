@@ -23,10 +23,8 @@ namespace TCCPosPucMinas.Domain.Models
 
         [StringLength(4)]
         public string AnoFabricacao { get; set; }
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        [DefaultValue("getutcdate()")]
-        public DateTime DataCadastro { get; set; }
+        
+        public DateTime DataCadastro { get; set; } = DateTime.Now;
 
         [StringLength(20)]
         public string Cor { get; set; }
@@ -50,6 +48,6 @@ namespace TCCPosPucMinas.Domain.Models
 
         public string ImagemURL { get; set; }
 
-        public Marca MarcaNavigation { get; set; }
+        public Marca? MarcaNavigation { get; set; }
     }
 }

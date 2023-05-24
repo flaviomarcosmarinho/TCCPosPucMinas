@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TCCPosPucMinas.Application.Interface;
+﻿using TCCPosPucMinas.Application.Interface;
 using TCCPosPucMinas.Domain.Models;
 using TCCPosPucMinas.Persistence.Interface;
 

@@ -12,7 +12,7 @@ using TCCPosPucMinas.Persistence;
 namespace TCCPosPucMinas.Persistence.Migrations
 {
     [DbContext(typeof(TCCPosPucMinasContext))]
-    [Migration("20230512014007_Initial")]
+    [Migration("20230523174808_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,7 +66,6 @@ namespace TCCPosPucMinas.Persistence.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime>("DataCadastro")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Descricao")

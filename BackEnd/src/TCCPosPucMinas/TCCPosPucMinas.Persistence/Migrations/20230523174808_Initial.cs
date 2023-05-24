@@ -32,7 +32,7 @@ namespace TCCPosPucMinas.Persistence.Migrations
                     Modelo = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     AnoModelo = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: false),
                     AnoFabricacao = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: false),
-                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataCadastro = table.Column<DateTime>(type: "datetime", nullable: false),
                     Cor = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Descricao = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Observacao = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),

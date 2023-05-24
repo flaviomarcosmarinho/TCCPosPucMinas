@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.RegularExpressions;
 using TCCPosPucMinas.Application.Interface;
 using TCCPosPucMinas.Domain.Models;
 
