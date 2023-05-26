@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TCCPosPucMinas.Domain.Identity;
 
 namespace TCCPosPucMinas.Domain.Models
 {
@@ -48,6 +49,10 @@ namespace TCCPosPucMinas.Domain.Models
 
         public string ImagemURL { get; set; }
 
-        public Marca? MarcaNavigation { get; set; }
+        public int UserId { get; set; }
+
+        public User User { get; set; }
+
+        public Marca? Marca { get; set; }
     }
 }
