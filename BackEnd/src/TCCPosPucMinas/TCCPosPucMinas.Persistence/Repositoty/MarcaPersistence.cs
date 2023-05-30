@@ -15,7 +15,7 @@ namespace TCCPosPucMinas.Persistence.Repositoty
 
         public async Task<Marca[]> GetAllMarcasAsync()
         {
-            IQueryable<Marca> query = _context.Marcas.Include(m => m.VeiculosNavigation);
+            IQueryable<Marca> query = _context.Marcas.Include(m => m.Veiculos);
             query = query.OrderBy(m => m.Nome);
 
             return await query.AsNoTracking().OrderBy(m => m.Nome).ToArrayAsync();

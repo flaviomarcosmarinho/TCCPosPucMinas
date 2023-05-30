@@ -15,16 +15,16 @@ namespace TCCPosPucMinas.Persistence.Repositoty
 
         public async Task<Veiculo[]> GetAllVeiculosAsync()
         {
-            IQueryable<Veiculo> query = _context.Veiculos.Include(v => v.MarcaNavigation);
-            query = query.OrderBy(v => v.MarcaNavigation.Nome);
+            IQueryable<Veiculo> query = _context.Veiculos.Include(v => v.Marca);
+            query = query.OrderBy(v => v.Marca != null ? v.Marca.Nome : v.Descricao).OrderBy(v => v.Descricao);
 
             return await query.AsNoTracking().ToArrayAsync();
         }
 
         public async Task<Veiculo[]> GetAllVeiculosByMarcaAsync(string marca)
         {
-            IQueryable<Veiculo> query = _context.Veiculos.Include(v => v.MarcaNavigation);
-            query = query.Where(v => v.MarcaNavigation.Nome.ToLower().Equals(marca.ToLower()));
+            IQueryable<Veiculo> query = _context.Veiculos.Include(v => v.Marca);
+            query = query.Where(v => v.Marca != null && v.Marca.Nome.ToLower().Equals(marca.ToLower()));
 
             return await query.AsNoTracking().ToArrayAsync();
         }
