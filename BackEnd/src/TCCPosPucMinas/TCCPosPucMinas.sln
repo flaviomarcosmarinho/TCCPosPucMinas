@@ -5,11 +5,11 @@ VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCCPosPucMinas.API", "TCCPosPucMinas.API\TCCPosPucMinas.API.csproj", "{A8178FBA-9CE6-4425-9507-180F88BF67BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCCPosPucMinas.Persistence", "TCCPosPucMinas.Persistence\TCCPosPucMinas.Persistence.csproj", "{96CCB56F-7026-4277-9D5E-87587567E0B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCCPosPucMinas.Persistence", "TCCPosPucMinas.Persistence\TCCPosPucMinas.Persistence.csproj", "{96CCB56F-7026-4277-9D5E-87587567E0B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCCPosPucMinas.Domain", "TCCPosPucMinas.Domain\TCCPosPucMinas.Domain.csproj", "{646961CB-44E0-48C3-99B9-1B7AE790F9DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCCPosPucMinas.Domain", "TCCPosPucMinas.Domain\TCCPosPucMinas.Domain.csproj", "{646961CB-44E0-48C3-99B9-1B7AE790F9DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TCCPosPucMinas.Application", "TCCPosPucMinas.Application\TCCPosPucMinas.Application.csproj", "{9041C784-7E42-4639-AB3E-335225FC5784}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TCCPosPucMinas.Application", "TCCPosPucMinas.Application\TCCPosPucMinas.Application.csproj", "{9041C784-7E42-4639-AB3E-335225FC5784}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
