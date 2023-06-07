@@ -60,5 +60,35 @@ namespace TCCPosPucMinas.API.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao tentar registrar o usuário. Erro: {ex.Message}");
             }
         }
+
+        [HttpPost("Login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(UserLoginService userLogin)
+        {
+            try
+            {
+                var user = await this._accountService.GerUserByUserNameAsync(userLogin.UserName);
+                if(user == null)
+                {
+                    return Unauthorized("Usuário ou senha inválidos");
+                }
+
+                var result = await _accountService.CheckUserPasswordAsync(user, userLogin.Password);
+                if(!result.Succeeded)
+                {
+                    return Unauthorized("Usuário ou senha inválidos");
+                }
+
+                return Ok(new
+                {
+                    userName = user.UserName,
+                    token = _tokenService.CreateToken(user).Result
+                });
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao tentar recuperar usuário. Erro: {ex.Message}");
+            }
+        }
     }
 }
