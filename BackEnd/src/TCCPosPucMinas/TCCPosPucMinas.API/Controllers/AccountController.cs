@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TCCPosPucMinas.Application.BusinessRule;
 using TCCPosPucMinas.Application.Interface;
+using TCCPosPucMinas.API.Extensions;
 
 namespace TCCPosPucMinas.API.Controllers
 {
@@ -20,12 +21,12 @@ namespace TCCPosPucMinas.API.Controllers
             this._tokenService = tokenService;
         }
 
-        [HttpGet("GetUser/{userName}")]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetUser(string userName)
+        [HttpGet("GetUser")]       
+        public async Task<IActionResult> GetUser()
         {
             try
             {
+                var userName = User.GetUserName();
                 var user = await this._accountService.GerUserByUserNameAsync(userName);
                 return Ok(user);
             }
@@ -87,7 +88,33 @@ namespace TCCPosPucMinas.API.Controllers
             }
             catch (Exception ex)
             {
-                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao tentar recuperar usuário. Erro: {ex.Message}");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao tentar realizar login. Erro: {ex.Message}");
+            }
+        }
+
+        [HttpPut("UpdateUser")]
+        public async Task<IActionResult> UpdateUser(UserUpdateService userUpdateService)
+        {
+            try
+            {
+                var user = await this._accountService.GerUserByUserNameAsync(User.GetUserName());
+                if (user == null)
+                {
+                    return Unauthorized("Usuário inválido");
+                }
+
+                var userReturn = await this._accountService.UpdateAccount(userUpdateService);
+
+                if (userReturn == null)
+                {
+                    return NoContent();
+                }
+
+                return Ok(userReturn);
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao atualizar o usuário. Erro: {ex.Message}");
             }
         }
     }
