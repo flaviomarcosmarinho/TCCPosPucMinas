@@ -1,4 +1,6 @@
-﻿using TCCPosPucMinas.Application.Interface;
+﻿using AutoMapper;
+using TCCPosPucMinas.Application.Dtos;
+using TCCPosPucMinas.Application.Interface;
 using TCCPosPucMinas.Domain.Models;
 using TCCPosPucMinas.Persistence.Interface;
 
@@ -7,20 +9,27 @@ namespace TCCPosPucMinas.Application.BusinessRule
     public class VeiculoService : IVeiculoService
     {
         private readonly IVeiculoPersist _veiculoPersist;
+        private readonly IMapper _mapper;
 
-        public VeiculoService(IVeiculoPersist veiculoPersist)
+        public VeiculoService(IVeiculoPersist veiculoPersist, IMapper mapper)
         {
             this._veiculoPersist = veiculoPersist;
+            this._mapper = mapper;
         }
 
-        public async Task<Veiculo?> AddVeiculo(Veiculo model)
+        public async Task<VeiculoDto?> AddVeiculo(int userId, VeiculoDto model)
         {
             try
             {
-                _veiculoPersist.Add<Veiculo>(model);
+                var veiculo = _mapper.Map<Veiculo>(model); //Mapeamento de Dto para Domain
+
+                _veiculoPersist.Add<Veiculo>(veiculo); 
+
                 if (await _veiculoPersist.SaveChangesAsync())
                 {
-                    return await _veiculoPersist.GetVeiculoByIdAsync(model.Id);
+                    var veiculoRetorno = await _veiculoPersist.GetVeiculoByIdAsync(userId, veiculo.Id);
+
+                    return _mapper.Map<VeiculoDto>(veiculoRetorno); //Mapeamento Reverso
                 }
 
                 return null;
@@ -32,20 +41,24 @@ namespace TCCPosPucMinas.Application.BusinessRule
             }
         }
 
-        public async Task<Veiculo?> UpdateVeiculo(int veiculoId, Veiculo model)
+        public async Task<VeiculoDto?> UpdateVeiculo(int userId, int veiculoId, VeiculoDto model)
         {
             try
             {
-                var veiculo = await _veiculoPersist.GetVeiculoByIdAsync(veiculoId);
+                var veiculo = await _veiculoPersist.GetVeiculoByIdAsync(userId, veiculoId);
                 if (veiculo != null)
                 {
                     model.Id = veiculo.Id;
 
-                    _veiculoPersist.Update(model);
+                    _mapper.Map(model, veiculo);
+
+                    _veiculoPersist.Update<Veiculo>(veiculo);
 
                     if (await _veiculoPersist.SaveChangesAsync())
                     {
-                        return await _veiculoPersist.GetVeiculoByIdAsync(model.Id);
+                        var veiculoRetorno = await _veiculoPersist.GetVeiculoByIdAsync(userId, veiculo.Id);
+
+                        return _mapper.Map<VeiculoDto>(veiculoRetorno);
                     }
                 }
 
@@ -57,11 +70,11 @@ namespace TCCPosPucMinas.Application.BusinessRule
             }
         }
 
-        public async Task<bool> DeleteVeiculo(int veiculoId)
+        public async Task<bool> DeleteVeiculo(int userId, int veiculoId)
         {
             try
             {
-                var veiculo = await _veiculoPersist.GetVeiculoByIdAsync(veiculoId);
+                var veiculo = await _veiculoPersist.GetVeiculoByIdAsync(userId, veiculoId);
                 if (veiculo == null)
                 {
                     throw new Exception("Veículo não encontrado!");
@@ -76,11 +89,13 @@ namespace TCCPosPucMinas.Application.BusinessRule
             }
         }
 
-        public async Task<Veiculo[]> GetAllVeiculosAsync()
+        public async Task<VeiculoDto[]> GetAllVeiculosAsync(int userId)
         {
             try
             {
-                return await _veiculoPersist.GetAllVeiculosAsync();
+                var veiculos = await _veiculoPersist.GetAllVeiculosAsync(userId);
+                var resultado = _mapper.Map<VeiculoDto[]>(veiculos);
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -88,11 +103,13 @@ namespace TCCPosPucMinas.Application.BusinessRule
             }
         }
 
-        public async Task<Veiculo?> GetVeiculoByIdAsync(int veiculoId)
+        public async Task<VeiculoDto[]> GetAllVeiculoByMarcaAsync(int userId, string marca)
         {
             try
             {
-                return await _veiculoPersist.GetVeiculoByIdAsync(veiculoId);
+                var veiculos = await _veiculoPersist.GetAllVeiculosByMarcaAsync(userId, marca);
+                var resultado = _mapper.Map<VeiculoDto[]>(veiculos);
+                return resultado;
             }
             catch (Exception ex)
             {
@@ -100,16 +117,18 @@ namespace TCCPosPucMinas.Application.BusinessRule
             }
         }
 
-        public async Task<Veiculo[]> GetAllVeiculoByMarcaAsync(string marca)
+        public async Task<VeiculoDto?> GetVeiculoByIdAsync(int userId, int veiculoId)
         {
             try
             {
-                return await _veiculoPersist.GetAllVeiculosByMarcaAsync(marca);
+                var veiculo = await _veiculoPersist.GetVeiculoByIdAsync(userId, veiculoId);
+                var resultado = _mapper.Map<VeiculoDto>(veiculo);
+                return resultado;
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-        }        
+        }               
     }
 }

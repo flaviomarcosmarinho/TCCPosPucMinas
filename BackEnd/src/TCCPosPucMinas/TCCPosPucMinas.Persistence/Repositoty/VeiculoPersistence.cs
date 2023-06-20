@@ -13,25 +13,25 @@ namespace TCCPosPucMinas.Persistence.Repositoty
 
         #region Veiculo
 
-        public async Task<Veiculo[]> GetAllVeiculosAsync()
+        public async Task<Veiculo[]> GetAllVeiculosAsync(int userId)
         {
-            IQueryable<Veiculo> query = _context.Veiculos.Include(v => v.Marca);
+            IQueryable<Veiculo> query = _context.Veiculos.Where(v => v.UserId == userId).Include(v => v.Marca);
             query = query.OrderBy(v => v.Marca != null ? v.Marca.Nome : v.Descricao).OrderBy(v => v.Descricao);
 
             return await query.AsNoTracking().ToArrayAsync();
         }
 
-        public async Task<Veiculo[]> GetAllVeiculosByMarcaAsync(string marca)
+        public async Task<Veiculo[]> GetAllVeiculosByMarcaAsync(int userId, string marca)
         {
             IQueryable<Veiculo> query = _context.Veiculos.Include(v => v.Marca);
-            query = query.Where(v => v.Marca != null && v.Marca.Nome.ToLower().Equals(marca.ToLower()));
+            query = query.Where(v => v.Marca != null && v.Marca.Nome.ToLower().Equals(marca.ToLower()) && v.UserId == userId);
 
             return await query.AsNoTracking().ToArrayAsync();
         }
 
-        public async Task<Veiculo?> GetVeiculoByIdAsync(int veiculoId)
+        public async Task<Veiculo?> GetVeiculoByIdAsync(int userId, int veiculoId)
         {
-            return await _context.Veiculos.AsNoTracking().FirstOrDefaultAsync(v => v.Id == veiculoId);
+            return await _context.Veiculos.AsNoTracking().FirstOrDefaultAsync(v => v.Id == veiculoId && v.UserId == userId);
         }
 
         #endregion

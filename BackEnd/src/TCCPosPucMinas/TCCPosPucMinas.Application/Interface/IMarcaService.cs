@@ -1,15 +1,16 @@
-﻿using TCCPosPucMinas.Domain.Models;
+﻿using TCCPosPucMinas.Application.Dtos;
+using TCCPosPucMinas.Domain.Models;
 
 namespace TCCPosPucMinas.Application.Interface
 {
     public interface IMarcaService
     {
-        Task<Marca?> AddMarca(Marca model);
-        Task<Marca?> UpdateMarca(int marcaId, Marca model);
+        Task<MarcaDto?> AddMarca(MarcaDto model);
+        Task<MarcaDto?> UpdateMarca(int marcaId, MarcaDto model);
         Task<bool> DeleteMarca(int marcaId);
 
-        Task<Marca[]> GetAllMarcasAsync();
-        Task<Marca?> GetMarcaByIdAsync(int marcaId);
-        Task<Marca?> GetMarcaByNomeAsync(string marca);
+        Task<MarcaDto[]> GetAllMarcasAsync();
+        Task<MarcaDto?> GetMarcaByIdAsync(int marcaId);
+        Task<MarcaDto?> GetMarcaByNomeAsync(string marca);
     }
 }

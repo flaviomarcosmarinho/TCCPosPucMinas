@@ -1,15 +1,15 @@
-﻿using TCCPosPucMinas.Domain.Models;
+﻿using TCCPosPucMinas.Application.Dtos;
 
 namespace TCCPosPucMinas.Application.Interface
 {
     public interface IVeiculoService
     {
-        Task<Veiculo?> AddVeiculo(Veiculo model);
-        Task<Veiculo?> UpdateVeiculo(int veiculoId, Veiculo model);
-        Task<bool> DeleteVeiculo(int veiculoId);
+        Task<VeiculoDto?> AddVeiculo(int userId, VeiculoDto model);
+        Task<VeiculoDto?> UpdateVeiculo(int userId, int veiculoId, VeiculoDto model);
+        Task<bool> DeleteVeiculo(int userId, int veiculoId);
 
-        Task<Veiculo[]> GetAllVeiculosAsync();
-        Task<Veiculo?> GetVeiculoByIdAsync(int veiculoId);
-        Task<Veiculo[]> GetAllVeiculoByMarcaAsync(string marca);
+        Task<VeiculoDto[]> GetAllVeiculosAsync(int userId);
+        Task<VeiculoDto?> GetVeiculoByIdAsync(int userId, int veiculoId);
+        Task<VeiculoDto[]> GetAllVeiculoByMarcaAsync(int userId, string marca);
     }
 }

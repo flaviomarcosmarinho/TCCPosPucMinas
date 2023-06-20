@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TCCPosPucMinas.Application.Dtos;
 using TCCPosPucMinas.Application.Interface;
-using TCCPosPucMinas.Domain.Models;
 
 namespace TCCPosPucMinas.API.Controllers
 {
@@ -35,7 +35,7 @@ namespace TCCPosPucMinas.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Marca>> GetById(int id)
+        public async Task<ActionResult<MarcaDto>> GetById(int id)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace TCCPosPucMinas.API.Controllers
         }        
 
         [HttpPost]
-        public async Task<IActionResult> Post(Marca model)
+        public async Task<IActionResult> Post(MarcaDto model)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace TCCPosPucMinas.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Marca model)
+        public async Task<IActionResult> Put(int id, MarcaDto model)
         {
             try
             {

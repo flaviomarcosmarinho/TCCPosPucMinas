@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using TCCPosPucMinas.API.Extensions;
+using TCCPosPucMinas.Application.Dtos;
 using TCCPosPucMinas.Application.Interface;
-using TCCPosPucMinas.Domain.Models;
 
 namespace TCCPosPucMinas.API.Controllers
 {
@@ -9,10 +10,13 @@ namespace TCCPosPucMinas.API.Controllers
     public class VeiculoController : ControllerBase
     {
         private readonly IVeiculoService _veiculoService;
+        private readonly IAccountService _accountService;
 
-        public VeiculoController(IVeiculoService veiculoService)
+        public VeiculoController(IVeiculoService veiculoService,
+                                 IAccountService accountService)
         {
             this._veiculoService = veiculoService;
+            this._accountService = accountService;
         }
 
         [HttpGet]
@@ -20,7 +24,7 @@ namespace TCCPosPucMinas.API.Controllers
         {
             try
             {
-                var veiculos = await _veiculoService.GetAllVeiculosAsync();
+                var veiculos = await _veiculoService.GetAllVeiculosAsync(User.GetUserId());
                 if (veiculos == null)
                 {
                     return NotFound("Nenhum veículo encontrado!");
@@ -35,11 +39,11 @@ namespace TCCPosPucMinas.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Veiculo>> GetById(int id)
+        public async Task<ActionResult<VeiculoDto>> GetById(int id)
         {
             try
             {
-                var veiculo = await _veiculoService.GetVeiculoByIdAsync(id);
+                var veiculo = await _veiculoService.GetVeiculoByIdAsync(User.GetUserId(), id);
                 if (veiculo == null)
                 {
                     return NotFound("Veículo não encontrado!");
@@ -58,7 +62,7 @@ namespace TCCPosPucMinas.API.Controllers
         {
             try
             {
-                var veiculos = await _veiculoService.GetAllVeiculoByMarcaAsync(marca);
+                var veiculos = await _veiculoService.GetAllVeiculoByMarcaAsync(User.GetUserId(), marca);
                 if (veiculos == null)
                 {
                     return NotFound($"Nenhum veículo da marca {marca} encontrado!");
@@ -73,11 +77,11 @@ namespace TCCPosPucMinas.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Veiculo model)
+        public async Task<IActionResult> Post(VeiculoDto model)
         {
             try
             {                
-                var veiculo = await _veiculoService.AddVeiculo(model);
+                var veiculo = await _veiculoService.AddVeiculo(User.GetUserId(), model);
                 if (veiculo == null)
                 {
                     return BadRequest("Erro ao adicionar veículo!");
@@ -92,11 +96,11 @@ namespace TCCPosPucMinas.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Veiculo model)
+        public async Task<IActionResult> Put(int id, VeiculoDto model)
         {
             try
             {
-                var veiculo = await _veiculoService.UpdateVeiculo(id, model);
+                var veiculo = await _veiculoService.UpdateVeiculo(User.GetUserId(), id, model);
                 if (veiculo == null)
                 {
                     return BadRequest("Erro ao atualizar veículo!");
@@ -115,7 +119,7 @@ namespace TCCPosPucMinas.API.Controllers
         {
             try
             {
-                return await _veiculoService.DeleteVeiculo(id) ?
+                return await _veiculoService.DeleteVeiculo(User.GetUserId(), id) ?
                        Ok("Veículo removido com sucesso!") :
                        BadRequest("Não foi possível deletar o veículo!");                
             }

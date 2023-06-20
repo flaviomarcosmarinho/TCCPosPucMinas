@@ -1,4 +1,6 @@
-﻿using TCCPosPucMinas.Application.Interface;
+﻿using AutoMapper;
+using TCCPosPucMinas.Application.Dtos;
+using TCCPosPucMinas.Application.Interface;
 using TCCPosPucMinas.Domain.Models;
 using TCCPosPucMinas.Persistence.Interface;
 
@@ -7,20 +9,27 @@ namespace TCCPosPucMinas.Application.BusinessRule
     public class MarcaService : IMarcaService
     {
         private readonly IMarcaPersist _marcaPersist;
+        private readonly IMapper _mapper;
 
-        public MarcaService(IMarcaPersist marcaPersist)
+        public MarcaService(IMarcaPersist marcaPersist, IMapper mapper)
         {
             this._marcaPersist = marcaPersist;
+            this._mapper = mapper;
         }
 
-        public async Task<Marca?> AddMarca(Marca model)
+        public async Task<MarcaDto?> AddMarca(MarcaDto model)
         {
             try
             {
-                _marcaPersist.Add<Marca>(model);
+                var marca = _mapper.Map<Marca>(model); //Mapeamento de Dto para Domain
+
+                _marcaPersist.Add<Marca>(marca);
+
                 if(await _marcaPersist.SaveChangesAsync())
                 {
-                    return await _marcaPersist.GetMarcaByIdAsync(model.Id);
+                    var marcaRetorno = await _marcaPersist.GetMarcaByIdAsync(marca.Id);
+
+                    return _mapper.Map<MarcaDto>(marcaRetorno); //Mapeamento Reverso
                 }
 
                 return null;
@@ -32,7 +41,7 @@ namespace TCCPosPucMinas.Application.BusinessRule
             }
         }
 
-        public async Task<Marca?> UpdateMarca(int marcaId, Marca model)
+        public async Task<MarcaDto?> UpdateMarca(int marcaId, MarcaDto model)
         {
             try
             {
@@ -41,11 +50,15 @@ namespace TCCPosPucMinas.Application.BusinessRule
                 {
                     model.Id = marca.Id;
 
-                    _marcaPersist.Update(model);
+                    _mapper.Map(model, marca);
+
+                    _marcaPersist.Update<Marca>(marca);
 
                     if (await _marcaPersist.SaveChangesAsync())
                     {
-                        return await _marcaPersist.GetMarcaByIdAsync(model.Id);
+                        var marcaRetorno = await _marcaPersist.GetMarcaByIdAsync(marca.Id);
+
+                        return _mapper.Map<MarcaDto>(marcaRetorno);
                     }
                 }
 
@@ -76,11 +89,12 @@ namespace TCCPosPucMinas.Application.BusinessRule
             }
         }
 
-        public async Task<Marca[]> GetAllMarcasAsync()
+        public async Task<MarcaDto[]> GetAllMarcasAsync()
         {
             try
             {
-                return await _marcaPersist.GetAllMarcasAsync();          
+                var marcas = await _marcaPersist.GetAllMarcasAsync(); 
+                return _mapper.Map<MarcaDto[]>(marcas);
             }
             catch (Exception ex)
             {
@@ -88,11 +102,12 @@ namespace TCCPosPucMinas.Application.BusinessRule
             }
         }
 
-        public async Task<Marca?> GetMarcaByIdAsync(int marcaId)
+        public async Task<MarcaDto?> GetMarcaByIdAsync(int marcaId)
         {
             try
             {
-                return await _marcaPersist.GetMarcaByIdAsync(marcaId);
+                var marca = await _marcaPersist.GetMarcaByIdAsync(marcaId);
+                return _mapper.Map<MarcaDto?>(marca);
             }
             catch (Exception ex)
             {
@@ -100,11 +115,12 @@ namespace TCCPosPucMinas.Application.BusinessRule
             }
         }
 
-        public async Task<Marca?> GetMarcaByNomeAsync(string marca)
+        public async Task<MarcaDto?> GetMarcaByNomeAsync(string marca)
         {
             try
             {
-                return await _marcaPersist.GetMarcaByNomeAsync(marca);
+                var marcaResultado = await _marcaPersist.GetMarcaByNomeAsync(marca);
+                return _mapper.Map<MarcaDto?>(marcaResultado);
             }
             catch (Exception ex)
             {
